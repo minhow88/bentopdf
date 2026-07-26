@@ -7,8 +7,7 @@ import * as pdfjsLib from "pdfjs-dist";
 
 export async function decrypt() {
     const file = state.files[0];
-    // @ts-expect-error TS(2339) FIXME: Property 'value' does not exist on type 'HTMLEleme... Remove this comment to see the full error message
-    const password = document.getElementById('password-input').value;
+    const password = (document.getElementById('password-input') as HTMLInputElement).value;
     if (!password.trim()) {
         showAlert('Input Required', 'Please enter the PDF password.');
         return;
@@ -17,8 +16,7 @@ export async function decrypt() {
     try {
         showLoader('Preparing to process...');
         const pdfData = await readFileAsArrayBuffer(file);
-        // @ts-expect-error TS(2304) FIXME: Cannot find name 'pdfjsLib'.
-        const pdf = await pdfjsLib.getDocument({ data: pdfData, password: password }).promise;
+        const pdf = await pdfjsLib.getDocument({ data: pdfData as ArrayBuffer, password: password }).promise;
         const numPages = pdf.numPages;
         const pageImages = [];
 

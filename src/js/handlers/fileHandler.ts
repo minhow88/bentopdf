@@ -341,7 +341,7 @@ export function setupFileInputHandler(toolId) {
             const pdfWrapper = document.getElementById('embed-pdf-wrapper');
             const pdfContainer = document.getElementById('embed-pdf-container');
 
-            pdfContainer.textContent = ''; // Clear safely
+            pdfContainer.textContent = '';
 
             if (state.currentPdfUrl) {
                 URL.revokeObjectURL(state.currentPdfUrl);
@@ -350,18 +350,13 @@ export function setupFileInputHandler(toolId) {
             const fileURL = URL.createObjectURL(file);
             state.currentPdfUrl = fileURL;
 
-            const script = document.createElement('script');
-            script.type = 'module';
-            script.textContent = `
-                import EmbedPDF from 'https://snippet.embedpdf.com/embedpdf.js';
-                EmbedPDF.init({
-                    type: 'container',
-                    target: document.getElementById('embed-pdf-container'),
-                    src: '${fileURL}',
-                    theme: 'dark',
-                });
-            `;
-            document.head.appendChild(script);
+            // Use a local iframe-based PDF viewer instead of external embedpdf.js
+            const iframe = document.createElement('iframe');
+            iframe.src = fileURL;
+            iframe.className = 'w-full h-full rounded-lg border-0';
+            iframe.style.minHeight = '70vh';
+            iframe.title = 'PDF Preview';
+            pdfContainer.appendChild(iframe);
 
             const backBtn = document.getElementById('back-to-grid');
             const urlRevoker = () => {

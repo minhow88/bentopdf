@@ -12,6 +12,10 @@ export function resetState() {
     state.files = [];
     state.pdfDoc = null;
     state.pdfPages = [];
+    if (state.currentPdfUrl) {
+        URL.revokeObjectURL(state.currentPdfUrl);
+    }
     state.currentPdfUrl = null;
-    document.getElementById('tool-content').innerHTML = '';
+    const toolContent = document.getElementById('tool-content');
+    if (toolContent) toolContent.innerHTML = '';
 }

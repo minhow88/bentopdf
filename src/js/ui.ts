@@ -3,6 +3,7 @@ import { formatBytes } from './utils/helpers.js';
 import { tesseractLanguages } from './config/tesseract-languages.js';
 import { icons, createIcons } from "lucide";
 import Sortable from 'sortablejs';
+import * as pdfjsLib from 'pdfjs-dist';
 
 // Centralizing DOM element selection
 export const dom = {
@@ -117,7 +118,6 @@ export const renderPageThumbnails = async (toolId: any, pdfDoc: any) => {
     showLoader('Rendering page previews...');
 
     const pdfData = await pdfDoc.save();
-    // @ts-expect-error TS(2304) FIXME: Cannot find name 'pdfjsLib'.
     const pdf = await pdfjsLib.getDocument({ data: pdfData }).promise;
 
     for (let i = 1; i <= pdf.numPages; i++) {
@@ -127,7 +127,7 @@ export const renderPageThumbnails = async (toolId: any, pdfDoc: any) => {
         canvas.height = viewport.height;
         canvas.width = viewport.width;
         const context = canvas.getContext('2d');
-        await page.render({ canvasContext: context, viewport: viewport }).promise;
+        await page.render({ canvasContext: context, viewport: viewport, canvas: canvas }).promise;
 
         const wrapper = document.createElement('div');
         wrapper.className = 'page-thumbnail relative group';

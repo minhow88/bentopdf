@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BentoPDF - The Privacy First PDF Toolkit</title>
-    <script async src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -215,7 +214,7 @@
 
         <div class="section-divider hide-section mb-20 mt-10"></div>
 
-        <!-- COMPLIANCE SECTION START -->
+        <!-- PRIVACY SECTION START -->
         <section id="security-compliance-section" class="py-20 hide-section">
             <div class="mb-8 text-center">
                 <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6 text-balance">
@@ -230,54 +229,47 @@
                         class="inline-block border-2 border-indigo-400 bg-indigo-900 text-indigo-300 px-4 py-2 rounded-full mx-2 text-2xl md:text-3xl lg:text-4xl font-bold">
                         your information safe
                     </span>
-                    by following global security standards.
+                    with 100% local processing.
                 </h2>
             </div>
             <div class="mb-16 text-center">
                 <span class="inline-flex items-center gap-2 text-indigo-400 text-lg font-medium transition-colors">
-                    All the processing happens locally on your device.
+                    All the processing happens locally on your device. Self-hosted for maximum privacy.
                 </span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-4">
-                <!-- GDPR Compliance -->
                 <div class="flex flex-col items-center text-center">
                     <div
-                        class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-blue-600 flex items-center justify-center mb-4">
-                        <img src="https://mkt-cf.pdffiller.com/mrk/350/images/_global/logos/security-badges/logo-gdpr.svg"
-                            alt="GDPR compliance" class="w-full h-full">
+                        class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-indigo-600 flex items-center justify-center mb-4">
+                        <i data-lucide="shield-check" class="w-12 h-12 text-white"></i>
                     </div>
-                    <h3 class="text-lg md:text-xl font-bold text-white mb-3">GDPR compliance</h3>
-                    <p class="text-gray-400 text-sm md:text-base leading-relaxed max-w-xs">Protects the personal data
-                        and privacy of individuals within the European Union.</p>
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-3">100% Client-Side</h3>
+                    <p class="text-gray-400 text-sm md:text-base leading-relaxed max-w-xs">All PDF processing runs entirely in your browser. No data is ever sent to any server.</p>
                 </div>
 
                 <div class="flex flex-col items-center text-center">
                     <div
-                        class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-blue-600 flex items-center justify-center mb-4">
-                        <img src="https://mkt-cf.pdffiller.com/mrk/350/images/_global/logos/security-badges/logo-ccpa.svg"
-                            alt="CCPA compliance" class="w-full h-full">
+                        class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-indigo-600 flex items-center justify-center mb-4">
+                        <i data-lucide="server" class="w-12 h-12 text-white"></i>
                     </div>
-                    <h3 class="text-lg md:text-xl font-bold text-white mb-3">CCPA compliance</h3>
-                    <p class="text-gray-400 text-sm md:text-base leading-relaxed max-w-xs">Gives California residents
-                        rights over how their personal information is collected, used, and shared.</p>
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-3">Self-Hosted</h3>
+                    <p class="text-gray-400 text-sm md:text-base leading-relaxed max-w-xs">Running on your own infrastructure means you have full control over access and security.</p>
                 </div>
 
                 <div class="flex flex-col items-center text-center">
                     <div
-                        class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-blue-600 flex items-center justify-center mb-4">
-                        <img src="https://mkt-cf.pdffiller.com/mrk/350/images/_global/logos/security-badges/logo-hipaa.svg"
-                            alt="HIPAA compliance" class="w-full h-full">
+                        class="w-20 h-20 md:w-24 md:h-24 rounded-full bg-indigo-600 flex items-center justify-center mb-4">
+                        <i data-lucide="lock" class="w-12 h-12 text-white"></i>
                     </div>
-                    <h3 class="text-lg md:text-xl font-bold text-white mb-3">HIPAA compliance</h3>
-                    <p class="text-gray-400 text-sm md:text-base leading-relaxed max-w-xs">Sets safeguards for handling
-                        sensitive health information in the United States healthcare system.</p>
+                    <h3 class="text-lg md:text-xl font-bold text-white mb-3">No External Calls</h3>
+                    <p class="text-gray-400 text-sm md:text-base leading-relaxed max-w-xs">No analytics, no tracking, no third-party scripts. Your documents stay completely private.</p>
                 </div>
 
             </div>
         </section>
 
-        <!-- COMPLAINCE SECTION END -->
+        <!-- PRIVACY SECTION END -->
 
         <div class="section-divider hide-section"></div>
 
@@ -399,7 +391,7 @@
                 </div>
             </div>
 
-            <!-- New FAQ: Analytics -->
+            <!-- FAQ: Analytics -->
             <div class="faq-item bg-gray-800 rounded-lg border border-gray-700">
                 <button class="faq-question w-full flex justify-between items-center text-left p-6">
                     <span class="text-lg font-semibold text-white">Do you use cookies or analytics to track me?</span>
@@ -407,11 +399,8 @@
                 </button>
                 <div class="faq-answer max-h-0 overflow-hidden transition-all duration-300 ease-in-out">
                     <p class="p-6 pt-0 text-gray-400">
-                        We care about your privacy. BentoPDF does not track personal information. We use <a
-                            href="https://simpleanalytics.com" class="text-indigo-400 hover:underline" target="_blank"
-                            rel="noopener noreferrer">Simple Analytics</a> solely to see anonymous visit counts. This
-                        means we can know how many users visit our site, but <strong>we never know who you are</strong>.
-                        Simple Analytics is fully GDPR-compliant and respects your privacy.
+                        No. This is a self-hosted instance with <strong>zero analytics, zero tracking, and zero cookies</strong>.
+                        No data about your usage is collected or sent anywhere. Your activity is completely private.
                     </p>
                 </div>
             </div>
@@ -498,20 +487,12 @@
             <div
                 class="max-w-4xl mx-auto text-center bg-gray-800 p-8 md:p-12 rounded-xl border border-gray-700 shadow-2xl">
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-                    Like My Work?
+                    Self-Hosted &amp; Private
                 </h2>
                 <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
-                    BentoPDF is a passion project, built to provide a free, private, and powerful PDF toolkit for
-                    everyone. If you find it useful, consider supporting its development. Every coffee helps!
+                    This instance runs entirely on your own infrastructure. All PDF processing happens locally in your browser.
+                    No files leave your network. Based on the open-source BentoPDF project (Apache 2.0).
                 </p>
-
-                <a href="https://ko-fi.com/alio01" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 px-8 py-3 rounded-full bg-gradient-to-b from-indigo-500 to-indigo-600 text-white font-semibold 
-          focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-indigo-400 
-          hover:shadow-xl hover:shadow-indigo-500/30 transition-all duration-200 transform hover:-translate-y-1 mt-5">
-                    <i data-lucide="coffee" class="w-7 h-7"></i>
-                    <span>Buy Me a Coffee</span>
-                </a>
-                </a>
             </div>
         </section>
 
@@ -548,37 +529,16 @@
                 </div>
 
 <div>
-    <h3 class="font-bold text-white mb-4">Follow Us</h3>
+    <h3 class="font-bold text-white mb-4">Links</h3>
     <div class="flex justify-center md:justify-start space-x-4">
-        <a href="https://github.com/alam00000/bentopdf" target="_blank" rel="noopener noreferrer"
-            class="text-gray-400 hover:text-indigo-400" title="GitHub">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill-rule="evenodd"
-                    d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                    clip-rule="evenodd" />
-            </svg>
+        <a href="index.html" class="text-gray-400 hover:text-indigo-400" title="Home">
+            <i data-lucide="home"></i>
         </a>
-        <a href="https://discord.gg/q42xWQmJ" target="_blank" rel="noopener noreferrer"
-            class="text-gray-400 hover:text-indigo-400" title="Discord">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                    d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z" />
-            </svg>
+        <a href="index.html#tools-header" class="text-gray-400 hover:text-indigo-400" title="All Tools">
+            <i data-lucide="wrench"></i>
         </a>
-        <a href="https://www.instagram.com/thebentopdf/" class="text-gray-400 hover:text-indigo-400" title="Instagram">
-            <i data-lucide="instagram"></i>
-        </a>
-        <a href="https://www.linkedin.com/company/bentopdf/" class="text-gray-400 hover:text-indigo-400" title="LinkedIn">
-            <i data-lucide="linkedin"></i>
-        </a>
-        <a href="https://x.com/BentoPDF" class="text-gray-400 hover:text-indigo-400" title="X (Twitter)">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                    d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-                </a>
-                </div>
-                </div>
+    </div>
+</div>
 
             </div>
         </div>

@@ -8,10 +8,12 @@ import { PDFDocument as PDFLibDocument, rgb, StandardFonts, degrees } from 'pdf-
 const A4_WIDTH = 595.28;
 const A4_HEIGHT = 841.89;
 
-// Cross-out line settings
-const CROSS_LINE_SIZE = 50; // size of the X cross-out area at the corner
-const CROSS_LINE_WIDTH = 1;
-const CROSS_COLOR = rgb(0, 0, 0);
+// Diagonal cross-line settings
+const LINE_THICKNESS = 1.5;
+const LINE_COLOR = rgb(0, 0, 0);
+const TEXT_COLOR = rgb(0, 0, 0);
+const TEXT_FONT_SIZE = 24;
+const LINE_GAP = 30; // perpendicular distance between the two parallel lines
 
 // Margins and spacing
 const PAGE_MARGIN = 40;
@@ -79,45 +81,57 @@ async function embedImage(pdfDoc: any, file: File) {
 }
 
 /**
- * Draws 2 parallel diagonal lines at the top-left corner of an image area,
- * with the user's text (e.g., "For XXX purpose only") between the two lines.
- * This is the Malaysian certified true copy style for IC photocopies.
+ * Draws 2 parallel diagonal lines across the ENTIRE image (bottom-left to top-right),
+ * with large bold text written between the two lines.
+ * This matches the Malaysian IC photocopy "certified true copy" style.
  */
-function drawCornerCrossOut(page: any, x: number, y: number, width: number, height: number, font: any, text: string) {
-    const lineLength = CROSS_LINE_SIZE;
-    const lineGap = 28; // gap between the two parallel lines (enough for text)
+function drawDiagonalCrossLines(page: any, x: number, y: number, width: number, height: number, font: any, text: string) {
+    // The lines go from bottom-left to top-right of the image area
+    // We offset them perpendicular to the diagonal direction to create parallel lines
 
-    // Both lines go from top-left towards bottom-right (diagonal ╱ direction)
-    // Line 1 (outer/left line)
+    // Calculate the diagonal angle
+    const angle = Math.atan2(height, width); // angle in radians from horizontal
+
+    // Perpendicular offset (to shift lines apart from each other)
+    const offsetX = (LINE_GAP / 2) * Math.sin(angle);
+    const offsetY = (LINE_GAP / 2) * Math.cos(angle);
+
+    // Line 1 (shifted up-left from center diagonal)
     page.drawLine({
-        start: { x: x, y: y + height },
-        end: { x: x + lineLength, y: y + height - lineLength },
-        thickness: CROSS_LINE_WIDTH,
-        color: CROSS_COLOR,
+        start: { x: x - offsetX, y: y - offsetY },
+        end: { x: x + width - offsetX, y: y + height - offsetY },
+        thickness: LINE_THICKNESS,
+        color: LINE_COLOR,
     });
 
-    // Line 2 (inner/right line, offset parallel to line 1)
+    // Line 2 (shifted down-right from center diagonal)
     page.drawLine({
-        start: { x: x + lineGap, y: y + height },
-        end: { x: x + lineLength + lineGap, y: y + height - lineLength },
-        thickness: CROSS_LINE_WIDTH,
-        color: CROSS_COLOR,
+        start: { x: x + offsetX, y: y + offsetY },
+        end: { x: x + width + offsetX, y: y + height + offsetY },
+        thickness: LINE_THICKNESS,
+        color: LINE_COLOR,
     });
 
-    // Draw the user text between the two diagonal lines, rotated to match the angle
+    // Draw the text between the two lines, rotated to follow the diagonal
     if (text.trim()) {
-        const fontSize = 7;
-        // Position text between the two lines, rotated at -45 degrees to follow the diagonal
-        const textX = x + (lineGap / 2) - 2;
-        const textY = y + height - (lineLength / 2) + 2;
+        const angleDegrees = (angle * 180) / Math.PI;
 
-        page.drawText(text, {
+        // Calculate text width to center it along the diagonal
+        const textWidth = font.widthOfTextAtSize(text.toUpperCase(), TEXT_FONT_SIZE);
+        const diagonalLength = Math.sqrt(width * width + height * height);
+
+        // Position text at the center of the diagonal
+        const centerProgress = (diagonalLength - textWidth) / (2 * diagonalLength);
+        const textX = x + width * centerProgress;
+        const textY = y + height * centerProgress;
+
+        page.drawText(text.toUpperCase(), {
             x: textX,
             y: textY,
             font,
-            size: fontSize,
-            color: rgb(0.1, 0.1, 0.1),
-            rotate: degrees(-45),
+            size: TEXT_FONT_SIZE,
+            color: TEXT_COLOR,
+            rotate: degrees(angleDegrees),
         });
     }
 }
@@ -150,7 +164,7 @@ export async function idCardToPdf() {
 
     try {
         const pdfDoc = await PDFLibDocument.create();
-        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        const font = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
         // Create an A4 page
         const page = pdfDoc.addPage([A4_WIDTH, A4_HEIGHT]);
@@ -190,24 +204,6 @@ export async function idCardToPdf() {
         const backX = PAGE_MARGIN + (drawWidth - backW) / 2;
         const backY = PAGE_MARGIN;
 
-        // Draw labels above images
-        const labelFontSize = 11;
-        page.drawText('FRONT', {
-            x: frontX,
-            y: frontY + frontH + 14,
-            font,
-            size: labelFontSize,
-            color: rgb(0.2, 0.2, 0.2),
-        });
-
-        page.drawText('BACK', {
-            x: backX,
-            y: backY + backH + 14,
-            font,
-            size: labelFontSize,
-            color: rgb(0.2, 0.2, 0.2),
-        });
-
         // Draw the front image
         page.drawImage(frontImage, {
             x: frontX,
@@ -224,11 +220,11 @@ export async function idCardToPdf() {
             height: backH,
         });
 
-        // Draw corner cross-out line and text for front image
-        drawCornerCrossOut(page, frontX, frontY, frontW, frontH, font, labelText);
+        // Draw diagonal cross lines and text over front image
+        drawDiagonalCrossLines(page, frontX, frontY, frontW, frontH, font, labelText);
 
-        // Draw corner cross-out line and text for back image
-        drawCornerCrossOut(page, backX, backY, backW, backH, font, labelText);
+        // Draw diagonal cross lines and text over back image
+        drawDiagonalCrossLines(page, backX, backY, backW, backH, font, labelText);
 
         // Save and download
         const pdfBytes = await pdfDoc.save();

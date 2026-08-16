@@ -44,6 +44,7 @@ export const categories = [
             { id: 'bmp-to-pdf', name: 'BMP to PDF', icon: 'image', subtitle: 'Create a PDF from one or more BMP images.' },
             { id: 'heic-to-pdf', name: 'HEIC to PDF', icon: 'smartphone', subtitle: 'Create a PDF from one or more HEIC images.' },
             { id: 'tiff-to-pdf', name: 'TIFF to PDF', icon: 'layers', subtitle: 'Create a PDF from one or more TIFF images.' },
+            { id: 'id-card-to-pdf', name: 'ID Card to PDF', icon: 'id-card', subtitle: 'Place front & back of an ID card on a single A4 page with crop marks.' },
             { id: 'txt-to-pdf', name: 'Text to PDF', icon: 'file-pen', subtitle: 'Convert a plain text file into a PDF.' },
             // { id: 'md-to-pdf', name: 'Markdown to PDF', icon: 'file-text', subtitle: 'Convert a Markdown file into a PDF.' },
             // { id: 'scan-to-pdf', name: 'Scan to PDF', icon: 'camera', subtitle: 'Use your camera to create a scanned PDF.' },

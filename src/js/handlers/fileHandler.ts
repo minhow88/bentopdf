@@ -286,6 +286,20 @@ function handleMultiFileUpload(toolId) {
         });
 
         Sortable.create(imageList);
+    } else if (toolId === 'id-card-to-pdf') {
+        const preview = document.getElementById('ic-preview');
+        const frontPreview = document.getElementById('ic-front-preview') as HTMLImageElement;
+        const backPreview = document.getElementById('ic-back-preview') as HTMLImageElement;
+
+        if (state.files.length >= 1 && frontPreview) {
+            frontPreview.src = URL.createObjectURL(state.files[0]);
+        }
+        if (state.files.length >= 2 && backPreview) {
+            backPreview.src = URL.createObjectURL(state.files[1]);
+        }
+        if (preview && state.files.length >= 2) {
+            preview.classList.remove('hidden');
+        }
     }
 }
 

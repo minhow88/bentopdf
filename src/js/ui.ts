@@ -1837,4 +1837,42 @@ posterize: () => `
     </div>
 `,
 
+'id-card-to-pdf': () => `
+    <h2 class="text-2xl font-bold text-white mb-4">ID Card to PDF</h2>
+    <p class="mb-6 text-gray-400">Upload the front and back images of an identity card. They will be placed on a single A4 page with corner crop marks.</p>
+    ${createFileInputHTML({ multiple: true, accept: 'image/jpeg,image/png,image/webp,image/bmp' })}
+    <div id="file-display-area" class="mt-4 space-y-2"></div>
+
+    <div id="ic-card-options" class="mt-6 space-y-4">
+        <div class="p-3 bg-gray-900 rounded-lg border border-gray-700">
+            <p class="text-sm text-gray-300"><strong class="text-white">How it works:</strong></p>
+            <ul class="list-disc list-inside text-xs text-gray-400 mt-1 space-y-1">
+                <li>Select exactly <strong>2 images</strong> — one for the front, one for the back of the ID card.</li>
+                <li>Both images will be placed on a single A4 page (front on top, back on bottom).</li>
+                <li>Cross marks (✛) will be drawn at the corners of each image for alignment/cutting.</li>
+                <li>Optionally enter a label (e.g., your name or purpose) which will appear near the corner marks.</li>
+            </ul>
+        </div>
+
+        <div id="ic-preview" class="hidden grid grid-cols-2 gap-4">
+            <div class="text-center">
+                <p class="text-xs text-gray-400 mb-1">Front</p>
+                <img id="ic-front-preview" class="w-full h-32 object-contain rounded-md border border-gray-600 bg-gray-800" />
+            </div>
+            <div class="text-center">
+                <p class="text-xs text-gray-400 mb-1">Back</p>
+                <img id="ic-back-preview" class="w-full h-32 object-contain rounded-md border border-gray-600 bg-gray-800" />
+            </div>
+        </div>
+
+        <div>
+            <label for="ic-label-text" class="block mb-2 text-sm font-medium text-gray-300">Label Text (optional)</label>
+            <input type="text" id="ic-label-text" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5" placeholder="e.g., Certified True Copy — John Doe">
+            <p class="text-xs text-gray-500 mt-1">This text will appear near the corner marks of each image.</p>
+        </div>
+    </div>
+
+    <button id="process-btn" class="btn-gradient w-full mt-6" disabled>Generate ID Card PDF</button>
+`,
+
 };

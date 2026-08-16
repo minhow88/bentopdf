@@ -2,7 +2,7 @@ import { showLoader, hideLoader, showAlert } from '../ui.js';
 import { downloadFile, readFileAsArrayBuffer } from '../utils/helpers.js';
 import { state } from '../state.js';
 
-import { PDFDocument as PDFLibDocument, rgb, StandardFonts } from 'pdf-lib';
+import { PDFDocument as PDFLibDocument, rgb, StandardFonts, degrees } from 'pdf-lib';
 
 // A4 dimensions in points (72 points per inch)
 const A4_WIDTH = 595.28;
@@ -79,40 +79,45 @@ async function embedImage(pdfDoc: any, file: File) {
 }
 
 /**
- * Draws a diagonal cross-out "X" at the top-left corner of an image area,
- * with the user's text written diagonally across it.
- * This is the Malaysian "Salinan Sah" (Certified True Copy) style.
+ * Draws 2 parallel diagonal lines at the top-left corner of an image area,
+ * with the user's text (e.g., "For XXX purpose only") between the two lines.
+ * This is the Malaysian certified true copy style for IC photocopies.
  */
 function drawCornerCrossOut(page: any, x: number, y: number, width: number, height: number, font: any, text: string) {
-    // The cross-out X is drawn at the top-left corner of the image
-    // Two diagonal lines forming an X
-    const crossSize = CROSS_LINE_SIZE;
+    const lineLength = CROSS_LINE_SIZE;
+    const lineGap = 28; // gap between the two parallel lines (enough for text)
 
-    // Line 1: top-left to bottom-right of the cross area (\ shape)
+    // Both lines go from top-left towards bottom-right (diagonal ╱ direction)
+    // Line 1 (outer/left line)
     page.drawLine({
         start: { x: x, y: y + height },
-        end: { x: x + crossSize, y: y + height - crossSize },
+        end: { x: x + lineLength, y: y + height - lineLength },
         thickness: CROSS_LINE_WIDTH,
         color: CROSS_COLOR,
     });
 
-    // Line 2: bottom-left to top-right of the cross area (/ shape)
+    // Line 2 (inner/right line, offset parallel to line 1)
     page.drawLine({
-        start: { x: x, y: y + height - crossSize },
-        end: { x: x + crossSize, y: y + height },
+        start: { x: x + lineGap, y: y + height },
+        end: { x: x + lineLength + lineGap, y: y + height - lineLength },
         thickness: CROSS_LINE_WIDTH,
         color: CROSS_COLOR,
     });
 
-    // Draw the user text diagonally across the cross-out area
+    // Draw the user text between the two diagonal lines, rotated to match the angle
     if (text.trim()) {
-        const fontSize = 8;
+        const fontSize = 7;
+        // Position text between the two lines, rotated at -45 degrees to follow the diagonal
+        const textX = x + (lineGap / 2) - 2;
+        const textY = y + height - (lineLength / 2) + 2;
+
         page.drawText(text, {
-            x: x + crossSize + 6,
-            y: y + height - (crossSize / 2) - (fontSize / 2),
+            x: textX,
+            y: textY,
             font,
             size: fontSize,
-            color: rgb(0.2, 0.2, 0.2),
+            color: rgb(0.1, 0.1, 0.1),
+            rotate: degrees(-45),
         });
     }
 }

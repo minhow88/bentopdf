@@ -1849,8 +1849,8 @@ posterize: () => `
             <ul class="list-disc list-inside text-xs text-gray-400 mt-1 space-y-1">
                 <li>Select exactly <strong>2 images</strong> — one for the front, one for the back of the ID card.</li>
                 <li>Both images will be placed on a single A4 page (front on top, back on bottom).</li>
-                <li>Cross-out lines (✗) will be drawn at the top-left corner of each image (Certified True Copy style).</li>
-                <li>Optionally enter a label (e.g., your name or "Salinan Sah") which will appear next to the cross-out.</li>
+                <li>Two parallel diagonal lines will be drawn at the top-left corner of each image.</li>
+                <li>Enter a purpose label (e.g., "For bank loan purpose only") — it will appear between the lines.</li>
             </ul>
         </div>
 
@@ -1867,8 +1867,8 @@ posterize: () => `
 
         <div>
             <label for="ic-label-text" class="block mb-2 text-sm font-medium text-gray-300">Label Text (optional)</label>
-            <input type="text" id="ic-label-text" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5" placeholder="e.g., Certified True Copy — John Doe">
-            <p class="text-xs text-gray-500 mt-1">This text will appear near the corner marks of each image.</p>
+            <input type="text" id="ic-label-text" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5" placeholder="e.g., For bank loan application purpose only">
+            <p class="text-xs text-gray-500 mt-1">This text will appear between the two diagonal lines at the top-left corner (e.g., "For XXX purpose only").</p>
         </div>
     </div>
 

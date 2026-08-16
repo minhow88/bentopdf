@@ -8,15 +8,14 @@ import { PDFDocument as PDFLibDocument, rgb, StandardFonts } from 'pdf-lib';
 const A4_WIDTH = 595.28;
 const A4_HEIGHT = 841.89;
 
-// Cross mark settings
-const CROSS_SIZE = 20; // length of each cross arm in points
-const CROSS_LINE_WIDTH = 0.75;
+// Cross-out line settings
+const CROSS_LINE_SIZE = 50; // size of the X cross-out area at the corner
+const CROSS_LINE_WIDTH = 1;
 const CROSS_COLOR = rgb(0, 0, 0);
 
 // Margins and spacing
 const PAGE_MARGIN = 40;
 const IMAGE_GAP = 30; // gap between front and back images
-const TEXT_OFFSET = 8; // offset of text from the cross mark
 
 /**
  * Converts any image into a standard, web-friendly JPEG via canvas.
@@ -80,49 +79,40 @@ async function embedImage(pdfDoc: any, file: File) {
 }
 
 /**
- * Draws a cross mark (+ shape) at the specified position.
+ * Draws a diagonal cross-out "X" at the top-left corner of an image area,
+ * with the user's text written diagonally across it.
+ * This is the Malaysian "Salinan Sah" (Certified True Copy) style.
  */
-function drawCrossMark(page: any, x: number, y: number) {
-    // Horizontal line
+function drawCornerCrossOut(page: any, x: number, y: number, width: number, height: number, font: any, text: string) {
+    // The cross-out X is drawn at the top-left corner of the image
+    // Two diagonal lines forming an X
+    const crossSize = CROSS_LINE_SIZE;
+
+    // Line 1: top-left to bottom-right of the cross area (\ shape)
     page.drawLine({
-        start: { x: x - CROSS_SIZE / 2, y },
-        end: { x: x + CROSS_SIZE / 2, y },
+        start: { x: x, y: y + height },
+        end: { x: x + crossSize, y: y + height - crossSize },
         thickness: CROSS_LINE_WIDTH,
         color: CROSS_COLOR,
     });
-    // Vertical line
+
+    // Line 2: bottom-left to top-right of the cross area (/ shape)
     page.drawLine({
-        start: { x, y: y - CROSS_SIZE / 2 },
-        end: { x, y: y + CROSS_SIZE / 2 },
+        start: { x: x, y: y + height - crossSize },
+        end: { x: x + crossSize, y: y + height },
         thickness: CROSS_LINE_WIDTH,
         color: CROSS_COLOR,
     });
-}
 
-/**
- * Draws cross marks at the four corners of an image area, with user text near each corner.
- */
-function drawCornerMarks(page: any, x: number, y: number, width: number, height: number, font: any, text: string) {
-    const fontSize = 7;
-    const corners = [
-        { cx: x, cy: y + height },            // top-left
-        { cx: x + width, cy: y + height },     // top-right
-        { cx: x, cy: y },                      // bottom-left
-        { cx: x + width, cy: y },              // bottom-right
-    ];
-
-    for (const corner of corners) {
-        drawCrossMark(page, corner.cx, corner.cy);
-    }
-
-    // Draw the user text near the top-left corner of the image
+    // Draw the user text diagonally across the cross-out area
     if (text.trim()) {
+        const fontSize = 8;
         page.drawText(text, {
-            x: x + TEXT_OFFSET,
-            y: y + height + TEXT_OFFSET,
+            x: x + crossSize + 6,
+            y: y + height - (crossSize / 2) - (fontSize / 2),
             font,
             size: fontSize,
-            color: rgb(0.3, 0.3, 0.3),
+            color: rgb(0.2, 0.2, 0.2),
         });
     }
 }
@@ -229,11 +219,11 @@ export async function idCardToPdf() {
             height: backH,
         });
 
-        // Draw corner cross marks and text for front image
-        drawCornerMarks(page, frontX, frontY, frontW, frontH, font, labelText);
+        // Draw corner cross-out line and text for front image
+        drawCornerCrossOut(page, frontX, frontY, frontW, frontH, font, labelText);
 
-        // Draw corner cross marks and text for back image
-        drawCornerMarks(page, backX, backY, backW, backH, font, labelText);
+        // Draw corner cross-out line and text for back image
+        drawCornerCrossOut(page, backX, backY, backW, backH, font, labelText);
 
         // Save and download
         const pdfBytes = await pdfDoc.save();

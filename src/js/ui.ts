@@ -1849,8 +1849,8 @@ posterize: () => `
             <ul class="list-disc list-inside text-xs text-gray-400 mt-1 space-y-1">
                 <li>Select exactly <strong>2 images</strong> — one for the front, one for the back of the ID card.</li>
                 <li>Both images will be placed on a single A4 page (front on top, back on bottom).</li>
-                <li>Cross marks (✛) will be drawn at the corners of each image for alignment/cutting.</li>
-                <li>Optionally enter a label (e.g., your name or purpose) which will appear near the corner marks.</li>
+                <li>Cross-out lines (✗) will be drawn at the top-left corner of each image (Certified True Copy style).</li>
+                <li>Optionally enter a label (e.g., your name or "Salinan Sah") which will appear next to the cross-out.</li>
             </ul>
         </div>
 

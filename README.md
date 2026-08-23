@@ -1,198 +1,172 @@
-# BentoPDF
+# BentoPDF (Self-Hosted Fork)
 
-![Docker Pulls](https://img.shields.io/docker/pulls/bentopdf/bentopdf)
-[![Ko-fi](https://img.shields.io/badge/Buy%20me%20a%20Coffee-yellow?logo=kofi&style=flat-square)](https://ko-fi.com/alio0)
+A privacy-first, client-side PDF toolkit that runs entirely in the browser. No files are uploaded to any server.
 
-**BentoPDF** is a powerful, privacy-first, client-side PDF toolkit that allows you to manipulate, edit, merge, and process PDF files directly in your browser. No server-side processing is required, ensuring your files remain secure and private.
-
----
-
-## ✨ Why BentoPDF?
-
--   **Privacy First**: All processing happens in your browser. Your files are never uploaded to a server, guaranteeing 100% privacy.
--   **No Limits**: Manipulate as many files as you want, as often you want. There are no restrictions or upload limits.
--   **High Performance**: Built with modern web technologies, BentoPDF is fast and efficient, handling even large PDF files with ease.
--   **Completely Free**: BentoPDF is a free and open-source tool for everyone.
+> **Fork Notice:** This repository is a fork of [goodtab/bentopdf](https://github.com/goodtab/bentopdf), originally created by [Abdullah Alam](https://github.com/alam00000). The upstream project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0). This fork is maintained independently and is not affiliated with or endorsed by the original author.
 
 ---
 
-## 🛠️ Features / Tools Supported
+## About This Fork
 
-BentoPDF offers a comprehensive suite of tools to handle all your PDF needs.
+This fork is streamlined for personal and homelab self-hosting, with additional features and hardened Docker deployment. It is distributed under the same Apache 2.0 license as the upstream project.
 
-### Organize & Manage PDFs
-| Tool Name | Description |
-| :--- | :--- |
-| **Merge PDFs** | Combine multiple PDF files into one. |
-| **Split PDFs** | Extract specific pages or divide a document into smaller files. |
-| **Organize Pages** | Reorder, duplicate, or delete pages with a simple drag-and-drop interface. |
-| **Extract Pages** | Save a specific range of pages as a new PDF. |
-| **Delete Pages** | Remove unwanted pages from your document. |
-| **Rotate PDF** | Rotate individual or all pages in a document. |
-| **N-Up PDF** | Combine multiple pages onto a single page. |
-| **View PDF** | A powerful, integrated PDF viewer. |
+### Changes from Upstream
 
-### Edit & Modify PDFs
-| Tool Name | Description |
-| :--- | :--- |
-| **PDF Editor** | A comprehensive editor to modify your PDFs. |
-| **Add Page Numbers** | Easily add page numbers with customizable formatting. |
-| **Add Watermark** | Add text or image watermarks to protect your documents. |
-| **Header & Footer** | Add customizable headers and footers. |
-| **Crop PDF** | Crop specific pages or the entire document. |
-| **Invert Colors** | Invert the colors of your PDF pages for better readability. |
-| **Change Background** | Modify the background color of your PDF. |
-| **Change Text Color**| Change the color of text content within the PDF. |
-| **Fill Forms** | Fill out PDF forms directly in your browser. |
-| **Flatten PDF** | Flatten form fields and annotations into static content. |
-| **Remove Annotations**| Remove comments, highlights, and other annotations. |
-
-### Convert to PDF
-| Tool Name | Description |
-| :--- | :--- |
-| **Image to PDF** | Convert JPG, PNG, WebP, SVG, BMP, HEIC, and TIFF images to PDF. |
-| **Markdown to PDF** | Convert `.md` files into professional PDF documents. |
-| **Text to PDF** | Convert plain text files into a PDF. |
-
-### Convert from PDF
-| Tool Name | Description |
-| :--- | :--- |
-| **PDF to Image** | Convert PDF pages to JPG, PNG, WebP, BMP, or TIFF formats. |
-| **PDF to Greyscale** | Convert a color PDF into a black-and-white version. |
-| **OCR PDF** | Make scanned PDFs searchable and copyable using Optical Character Recognition. |
-
-### Secure & Optimize PDFs
-| Tool Name | Description |
-| :--- | :--- |
-| **Compress PDF** | Reduce file size while maintaining quality. |
-| **Repair PDF** | Attempt to repair and recover data from a corrupted PDF. |
-| **Encrypt PDF** | Add a password to protect your PDF from unauthorized access. |
-| **Decrypt PDF** | Remove password protection from a PDF (password required). |
-| **Change Permissions**| Set or modify user permissions for printing, copying, and editing. |
-| **Sign PDF** | Add your digital signature to a document. |
-| **Redact Content** | Permanently remove sensitive content from your PDFs. |
-| **Edit Metadata** | View and modify PDF metadata (author, title, keywords, etc.). |
-| **Remove Metadata** | Strip all metadata from your PDF for privacy. |
+- Removed external banners and promotional links for clean self-hosted use
+- Added **ID Card to PDF** tool (Malaysian IC style with parallel cross-lines and label text)
+- Added document-size presets to the ID Card tool
+- Upgraded dependencies for security (`pdfjs-dist`, `jspdf`)
+- Pinned all dependency versions for reproducible builds
+- Multi-architecture Docker support (amd64 / arm64)
+- Hardened Docker image (non-root, read-only, capability-dropped)
 
 ---
 
-## 🚀 Getting Started
-
-You can run BentoPDF locally for development or personal use.
-
-### Prerequisites
--   [Node.js](https://nodejs.org/) (v18 or higher recommended)
--   [npm](https://www.npmjs.com/) (or yarn/pnpm)
--   [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/install/) (for containerized setup)
-
-### 🚀 Run BentoPDF with Docker (Quick Start)
-  You can run BentoPDF directly from Docker Hub without cloning the repository:
-
+## Quick Start (Docker)
 
 ```bash
-docker pull bentopdf/bentopdf:latest
-docker run -p 3000:80 bentopdf/bentopdf:latest
+docker run -d -p 3000:8080 --name bentopdf vlmh88/bentopdf:latest
 ```
-Open your browser at: http://localhost:3000.
-This is the fastest way to try BentoPDF without setting up a development environment.
 
-### 🚀 Installation with npm
+Open your browser at http://localhost:3000.
 
-1.  **Clone the Repository**:
-    ```bash
-    git clone https://github.com/alam00000/bentopdf.git
-    cd bentopdf
-    ```
+### Docker Compose
 
-2.  **Install Dependencies**:
-    ```bash
-    npm install
-    ```
-
-3.  **Run the Development Server**:
-    ```bash
-    npm run dev
-    ```
-    The application will be available at `http://localhost:5173`.
-
-### 🚀 Running with Docker Compose Locally
-
-1.  **Clone the Repository**:
-    ```bash
-    git clone https://github.com/alam00000/bentopdf.git
-    cd bentopdf
-    ```
-
-2.  **Run with Docker Compose**:
-    Create a `docker-compose.yml` file with the content provided in the repository or use the existing one. Then, run:
-    ```bash
-    docker-compose up -d
-    ```
-    The application will be available at `http://localhost:3000`.
-
-    > **Note:** After making any local changes to the code, it’s recommended to rebuild the Docker image using:
-    ```bash
-    docker-compose up --build -d
-    ```
-    This ensures your latest changes are applied inside the container
+```yaml
+services:
+  bentopdf:
+    image: vlmh88/bentopdf:latest
+    container_name: bentopdf
+    ports:
+      - "3000:8080"
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+      - /var/run
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 256m
+```
 
 ---
 
+## Local Development
 
+### Prerequisites
 
-## 🛠️ Tech Stack & Background
+- [Node.js](https://nodejs.org/) v18 or higher
+- npm
 
-BentoPDF was originally built using **HTML**, **CSS**, and **vanilla JavaScript**. As the project grew, it was migrated to a modern stack for better maintainability and scalability:
+### Setup
 
--   **Vite**: A fast build tool for modern web development.
--   **TypeScript**: For type safety and an improved developer experience.
--   **Tailwind CSS**: For rapid and consistent UI development.
+```bash
+git clone https://github.com/minhow88/bentopdf.git
+cd bentopdf
+npm install
+npm run dev
+```
 
-> **Note:** Some parts of the codebase still use legacy structures from the original implementation. Contributors should expect gradual updates as testing and refactoring continue.
+The dev server starts at `http://localhost:5173`.
 
----
+### Build for Production
 
-## 🗺️ Roadmap
+```bash
+npm run build
+```
 
-### Planned Features:
--   **HTML to PDF**: Convert HTML files or web pages into PDF documents.
--   **Markdown to PDF**: Enhanced support for converting `.md` files to PDF.
--   **Sanitize PDF**: Remove potentially malicious content like scripts from PDFs.
--   **Convert to PDF/A**: Convert PDFs to the PDF/A archival format.
--   **Edit PDF Content**: Directly edit text and other content within your PDF.
--   **Linearize PDF**: Optimize PDFs for fast web viewing.
+Output is written to `dist/`.
 
-Contributions and discussions on the roadmap are welcome! Join the conversation via [Discord](https://discord.gg/q42xWQmJ).
+### Run Tests
 
----
-
-## 🤝 Contributing
-
-We welcome contributions from the community! Here’s how you can get started:
-
-1.  **Fork the repository** and create your branch from `main`.
-2.  Follow the **Getting Started** steps to set up your local environment.
-3.  Make your changes and commit them with a clear message.
-4.  **Open a Pull Request** and describe the changes you've made.
-
-Have an idea for a new tool or an improvement? [Open an issue](https://github.com/alam00000/bentopdf/issues) to discuss it first.
+```bash
+npm run test:run
+```
 
 ---
 
-## Special Thanks
+## Features
 
-BentoPDF wouldn’t be possible without the amazing open-source tools and libraries that power it. We’d like to extend our heartfelt thanks to the creators and maintainers of:  
+BentoPDF provides a comprehensive suite of browser-based PDF tools including:
 
-- **[PDFLib.js](https://pdf-lib.js.org/)** – For enabling powerful client-side PDF manipulation.  
-- **[PDF.js](https://mozilla.github.io/pdf.js/)** – For the robust PDF rendering engine in the browser.  
-- **[PDFKit](https://pdfkit.org/)** – For creating and editing PDFs with ease.  
-- **[EmbedPDF](https://github.com/embedpdf/embed-pdf-viewer)** – For seamless PDF embedding in web pages.  
-- **[Cropper.js](https://fengyuanchen.github.io/cropperjs/)** – For intuitive image cropping functionality.  
-- **[Vite](https://vitejs.dev/)** – For lightning-fast development and build tooling.  
-- **[Tailwind CSS](https://tailwindcss.com/)** – For rapid, flexible, and beautiful UI styling.  
+- Merge, split, extract, delete, and reorder pages
+- Add page numbers, watermarks, headers/footers
+- Crop, rotate, flatten, and edit PDFs
+- Convert images (JPG, PNG, WebP, SVG, BMP, HEIC, TIFF) to PDF
+- Convert PDF to images, greyscale, or searchable text (OCR)
+- Compress, encrypt, decrypt, sign, and redact PDFs
+- Edit and remove metadata
+- Markdown and plain text to PDF conversion
+- ID Card to PDF (fork addition)
 
-Your work inspires and empowers developers everywhere. Thank you for making open-source amazing!
+For the full feature list, see the [upstream README](https://github.com/goodtab/bentopdf#readme).
 
-## 📜 License
+---
 
-This project is licensed under the **Apache 2.0**. See the [LICENSE](https://github.com/alam00000/bentopdf/blob/main/LICENSE) file for details.
+## Tech Stack
+
+- **Vite** — build tooling
+- **TypeScript** — type safety
+- **Tailwind CSS** — UI styling
+- **pdf-lib**, **PDF.js**, **PDFKit** — PDF manipulation and rendering
+- **Tesseract.js** — OCR
+- **Nginx** — production static file serving (Docker)
+
+---
+
+## Upstream Attribution & Credits
+
+This project is a derivative work of [BentoPDF](https://github.com/goodtab/bentopdf) by Abdullah Alam, used under the terms of the Apache License 2.0.
+
+In compliance with Section 4 of the Apache License 2.0:
+
+- The original LICENSE file is retained in this repository.
+- Modified files carry notices of changes (via git history).
+- All copyright, patent, trademark, and attribution notices from the original work are preserved.
+
+### Open-Source Libraries
+
+This project also depends on the following open-source libraries (see `package.json` for exact versions):
+
+| Library | License |
+| :--- | :--- |
+| [pdf-lib](https://pdf-lib.js.org/) | MIT |
+| [PDF.js](https://mozilla.github.io/pdf.js/) | Apache-2.0 |
+| [PDFKit](https://pdfkit.org/) | MIT |
+| [Cropper.js](https://fengyuanchen.github.io/cropperjs/) | MIT |
+| [Tesseract.js](https://tesseract.projectnaptha.com/) | Apache-2.0 |
+| [Vite](https://vitejs.dev/) | MIT |
+| [Tailwind CSS](https://tailwindcss.com/) | MIT |
+
+---
+
+## License
+
+This project is licensed under the **Apache License 2.0** — the same license as the upstream project.
+
+```
+Copyright 2025 Abdullah Alam (original work)
+Copyright 2025 minhow88 (modifications)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```
+
+See the [LICENSE](./LICENSE) file for the full text.
+
+---
+
+## Disclaimer
+
+This fork is provided "as is" without warranty of any kind. It is not affiliated with, endorsed by, or sponsored by the original BentoPDF project or its maintainers. Use at your own risk.

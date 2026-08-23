@@ -14,13 +14,85 @@ const LINE_COLOR = rgb(0, 0, 0);
 const TEXT_COLOR = rgb(0, 0, 0);
 const TEXT_FONT_SIZE = 14;
 
-// IC card physical size: 85.60 × 53.98 mm converted to points (1 mm = 2.8346 pts)
-const IC_WIDTH_PT = 85.60 * 2.8346;  // ~242.6 pts
-const IC_HEIGHT_PT = 53.98 * 2.8346; // ~153.0 pts
+// Size preset system — replaces hardcoded IC dimensions
+export interface SizePreset {
+  label: string;
+  width_mm: number;
+  height_mm: number;
+}
+
+export const SIZE_PRESETS: Record<string, SizePreset> = {
+  ic: { label: 'IC (85.60 × 53.98 mm)', width_mm: 85.60, height_mm: 53.98 },
+  passport: { label: 'Passport (125 × 88 mm)', width_mm: 125, height_mm: 88 },
+  custom: { label: 'Custom', width_mm: NaN, height_mm: NaN },
+};
+
+// Conversion factor: 1 mm = 2.8346 PDF points
+export const MM_TO_PT = 2.8346;
 
 // Margins and spacing
 const PAGE_MARGIN = 40;
 const IMAGE_GAP = 30; // gap between front and back images
+
+/**
+ * Checks whether two images at the given dimensions (in mm) will fit
+ * on an A4 page when stacked vertically with margins and gap.
+ *
+ * Horizontal check: width_pt + 2 * PAGE_MARGIN <= A4_WIDTH
+ * Vertical check: 2 * height_pt + IMAGE_GAP + 2 * PAGE_MARGIN <= A4_HEIGHT
+ */
+export function checkDimensionsFitA4(width_mm: number, height_mm: number): boolean {
+  const width_pt = width_mm * MM_TO_PT;
+  const height_pt = height_mm * MM_TO_PT;
+
+  const horizontalFit = (width_pt + 2 * PAGE_MARGIN) <= A4_WIDTH;
+  const verticalFit = (2 * height_pt + IMAGE_GAP + 2 * PAGE_MARGIN) <= A4_HEIGHT;
+
+  return horizontalFit && verticalFit;
+}
+
+export interface Dimensions {
+  width_mm: number;
+  height_mm: number;
+}
+
+/**
+ * Resolves the currently selected dimensions from the UI.
+ * Returns the width/height in mm based on dropdown selection,
+ * or null if custom values are invalid (safety fallback).
+ */
+export function getSelectedDimensions(): Dimensions | null {
+  const selectEl = document.getElementById('ic-size-preset') as HTMLSelectElement | null;
+  const selectedValue = selectEl?.value || 'ic';
+
+  // Named preset — return its predefined dimensions
+  if (selectedValue === 'ic' || selectedValue === 'passport') {
+    const preset = SIZE_PRESETS[selectedValue];
+    return { width_mm: preset.width_mm, height_mm: preset.height_mm };
+  }
+
+  // Custom — parse the input fields
+  if (selectedValue === 'custom') {
+    const widthInput = document.getElementById('ic-custom-width') as HTMLInputElement | null;
+    const heightInput = document.getElementById('ic-custom-height') as HTMLInputElement | null;
+
+    const widthStr = widthInput?.value?.trim() || '';
+    const heightStr = heightInput?.value?.trim() || '';
+
+    const width = parseFloat(widthStr);
+    const height = parseFloat(heightStr);
+
+    // Validate: must be numeric and within [10, 300]
+    if (isNaN(width) || isNaN(height) || width < 10 || width > 300 || height < 10 || height > 300) {
+      return null;
+    }
+
+    return { width_mm: width, height_mm: height };
+  }
+
+  // Unknown value — fallback to null
+  return null;
+}
 
 /**
  * Converts any image into a standard, web-friendly JPEG via canvas.
@@ -151,11 +223,106 @@ function drawDiagonalCrossLines(page: any, x: number, y: number, width: number, 
 }
 
 /**
+ * Validates the custom width and height input fields.
+ * Returns true if both values are numeric and within [10.00, 300.00].
+ * Enables/disables the process button and shows/hides the validation message accordingly.
+ */
+export function validateCustomInputs(): boolean {
+    const widthEl = document.getElementById('ic-custom-width') as HTMLInputElement | null;
+    const heightEl = document.getElementById('ic-custom-height') as HTMLInputElement | null;
+    const msgEl = document.getElementById('ic-custom-validation-msg') as HTMLElement | null;
+    const btnEl = document.getElementById('process-btn') as HTMLButtonElement | null;
+
+    const widthVal = widthEl?.value?.trim() ?? '';
+    const heightVal = heightEl?.value?.trim() ?? '';
+
+    const widthNum = parseFloat(widthVal);
+    const heightNum = parseFloat(heightVal);
+
+    const isValid =
+        widthVal !== '' &&
+        heightVal !== '' &&
+        !isNaN(widthNum) &&
+        !isNaN(heightNum) &&
+        widthNum >= 10 &&
+        widthNum <= 300 &&
+        heightNum >= 10 &&
+        heightNum <= 300;
+
+    if (isValid) {
+        // Hide validation message
+        if (msgEl) {
+            msgEl.classList.add('hidden');
+        }
+        // Enable process button only if files are also uploaded
+        if (btnEl && state.files && state.files.length >= 2) {
+            btnEl.removeAttribute('disabled');
+        }
+    } else {
+        // Show validation message
+        if (msgEl) {
+            msgEl.classList.remove('hidden');
+            msgEl.textContent = 'Please enter valid dimensions between 10 and 300 mm.';
+        }
+        // Disable process button
+        if (btnEl) {
+            btnEl.setAttribute('disabled', 'disabled');
+        }
+    }
+
+    return isValid;
+}
+
+/**
  * Setup function: wires up UI event listeners after the template renders.
+ * Handles dropdown change events and custom input validation.
  */
 export function setupIdCardUI() {
-    // Nothing special needed on initial load — text input is always visible.
-    // The process button gets wired in fileHandler.
+    const presetSelect = document.getElementById('ic-size-preset') as HTMLSelectElement | null;
+    const customFields = document.getElementById('ic-custom-size-fields') as HTMLElement | null;
+    const customWidth = document.getElementById('ic-custom-width') as HTMLInputElement | null;
+    const customHeight = document.getElementById('ic-custom-height') as HTMLInputElement | null;
+    const processBtn = document.getElementById('process-btn') as HTMLButtonElement | null;
+
+    if (presetSelect) {
+        presetSelect.addEventListener('change', () => {
+            const value = presetSelect.value;
+            const validationMsg = document.getElementById('ic-custom-validation-msg') as HTMLElement | null;
+
+            if (value === 'custom') {
+                // Show custom size fields and run validation
+                if (customFields) {
+                    customFields.classList.remove('hidden');
+                }
+                validateCustomInputs();
+            } else {
+                // Hide custom size fields and validation message
+                if (customFields) {
+                    customFields.classList.add('hidden');
+                }
+                if (validationMsg) {
+                    validationMsg.classList.add('hidden');
+                }
+                // Enable process button if files are uploaded
+                if (processBtn && state.files && state.files.length >= 2) {
+                    processBtn.removeAttribute('disabled');
+                }
+            }
+        });
+    }
+
+    // Wire input event listeners for custom dimension fields
+    if (customWidth) {
+        customWidth.addEventListener('input', () => {
+            validateCustomInputs();
+        });
+    }
+
+    if (customHeight) {
+        customHeight.addEventListener('input', () => {
+            validateCustomInputs();
+        });
+    }
 }
 
 /**
@@ -190,12 +357,30 @@ export async function idCardToPdf() {
         const frontImage = await embedImage(pdfDoc, frontFile);
         const backImage = await embedImage(pdfDoc, backFile);
 
-        // Use actual IC card dimensions (85.60 × 53.98 mm)
-        const frontW = IC_WIDTH_PT;
-        const frontH = IC_HEIGHT_PT;
+        // Resolve selected dimensions from the UI (preset or custom)
+        const dimensions = getSelectedDimensions();
+        if (!dimensions) {
+            hideLoader();
+            showAlert('Invalid Dimensions', 'Could not resolve document dimensions. Please check your selection.');
+            return;
+        }
 
-        const backW = IC_WIDTH_PT;
-        const backH = IC_HEIGHT_PT;
+        // Check that the selected dimensions fit on an A4 page
+        if (!checkDimensionsFitA4(dimensions.width_mm, dimensions.height_mm)) {
+            hideLoader();
+            showAlert('Size Too Large', 'The selected document size is too large to fit on an A4 page. Please choose smaller dimensions.');
+            return;
+        }
+
+        // Convert mm to PDF points
+        const cardW = dimensions.width_mm * MM_TO_PT;
+        const cardH = dimensions.height_mm * MM_TO_PT;
+
+        const frontW = cardW;
+        const frontH = cardH;
+
+        const backW = cardW;
+        const backH = cardH;
 
         // Position: center both cards horizontally, stack vertically with gap
         // PDF coordinate system: (0,0) is bottom-left

@@ -1866,6 +1866,29 @@ posterize: () => `
         </div>
 
         <div>
+            <label for="ic-size-preset" class="block mb-2 text-sm font-medium text-gray-300">Document Size</label>
+            <select id="ic-size-preset" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5">
+                <option value="ic">IC (85.60 × 53.98 mm)</option>
+                <option value="passport">Passport (125 × 88 mm)</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+
+        <div id="ic-custom-size-fields" class="hidden">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="ic-custom-width" class="block mb-2 text-sm font-medium text-gray-300">Width (mm)</label>
+                    <input type="number" id="ic-custom-width" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5" placeholder="85.60" step="0.01" min="10" max="300">
+                </div>
+                <div>
+                    <label for="ic-custom-height" class="block mb-2 text-sm font-medium text-gray-300">Height (mm)</label>
+                    <input type="number" id="ic-custom-height" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5" placeholder="53.98" step="0.01" min="10" max="300">
+                </div>
+            </div>
+            <p id="ic-custom-validation-msg" class="hidden text-red-400 text-xs mt-1">Please enter valid dimensions between 10 and 300 mm.</p>
+        </div>
+
+        <div>
             <label for="ic-label-text" class="block mb-2 text-sm font-medium text-gray-300">Label Text (optional)</label>
             <input type="text" id="ic-label-text" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5" placeholder="e.g., For bank loan application purpose only">
             <p class="text-xs text-gray-500 mt-1">This text will appear between the two diagonal lines at the top-left corner (e.g., "For XXX purpose only").</p>

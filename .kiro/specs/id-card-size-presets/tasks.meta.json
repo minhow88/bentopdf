@@ -1,0 +1,202 @@
+{
+  "pbtResults": {},
+  "executionHistory": {
+    "1.1 Define SizePreset interface and SIZE_PRESETS constant map": [
+      {
+        "executionId": "aeade94c-f35d-488f-bf26-bde758256732",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787461043356
+      },
+      {
+        "executionId": "aeade94c-f35d-488f-bf26-bde758256732",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787461054492
+      },
+      {
+        "executionId": "99b4cb75-3fdd-492d-ba61-354de1de80bb",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787469940414
+      }
+    ],
+    "2.1 Update the id-card-to-pdf template in ui.ts": [
+      {
+        "executionId": "aeade94c-f35d-488f-bf26-bde758256732",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787461043607
+      },
+      {
+        "executionId": "99b4cb75-3fdd-492d-ba61-354de1de80bb",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787469947037
+      },
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787470752760
+      }
+    ],
+    "3.1 Implement `validateCustomInputs` function": [
+      {
+        "executionId": "aeade94c-f35d-488f-bf26-bde758256732",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787461043844
+      },
+      {
+        "executionId": "99b4cb75-3fdd-492d-ba61-354de1de80bb",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787469947813
+      },
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787470753572
+      }
+    ],
+    "3.2 Implement `getSelectedDimensions` function": [
+      {
+        "executionId": "aeade94c-f35d-488f-bf26-bde758256732",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787461044285
+      },
+      {
+        "executionId": "99b4cb75-3fdd-492d-ba61-354de1de80bb",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787469948314
+      },
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787470754269
+      }
+    ],
+    "3.3 Implement `checkDimensionsFitA4` function": [
+      {
+        "executionId": "aeade94c-f35d-488f-bf26-bde758256732",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787461044628
+      },
+      {
+        "executionId": "99b4cb75-3fdd-492d-ba61-354de1de80bb",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787469949105
+      },
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787470755057
+      }
+    ],
+    "4.1 Enhance `setupIdCardUI` to handle dropdown and custom inputs": [
+      {
+        "executionId": "aeade94c-f35d-488f-bf26-bde758256732",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787461044875
+      },
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787470766050
+      },
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787471602598
+      }
+    ],
+    "5. Checkpoint - Verify UI and validation logic": [
+      {
+        "executionId": "aeade94c-f35d-488f-bf26-bde758256732",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787461045280
+      },
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787471739262
+      },
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787471756291
+      }
+    ],
+    "6.1 Integrate dimension resolution and overflow check into PDF generation": [
+      {
+        "executionId": "aeade94c-f35d-488f-bf26-bde758256732",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787461045557
+      },
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787471611425
+      },
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787471716923
+      }
+    ],
+    "9. Final checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "aeade94c-f35d-488f-bf26-bde758256732",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787461045724
+      },
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787471785285
+      }
+    ],
+    "1. Refactor constants into SIZE_PRESETS configuration": [
+      {
+        "executionId": "99b4cb75-3fdd-492d-ba61-354de1de80bb",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787469940664
+      }
+    ],
+    "2. Add UI template with dropdown and custom size fields": [
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787470753016
+      }
+    ],
+    "3. Implement validation and dimension resolution functions": [
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787470755210
+      }
+    ],
+    "4. Wire up setupIdCardUI with event listeners": [
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787471602719
+      }
+    ],
+    "6. Update idCardToPdf to use selected dimensions": [
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787471717125
+      }
+    ],
+    "7. Add property-based tests with fast-check": [
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787471779678
+      }
+    ],
+    "8. Add unit tests": [
+      {
+        "executionId": "8caae9a0-521b-4464-bad6-84f3992ec44b",
+        "chatSessionId": "sess_caf80252-c19a-4e82-b9fd-d4b256b06d07",
+        "timestamp": 1787471780151
+      }
+    ]
+  }
+}

@@ -26,3 +26,8 @@ dist-ssr
 coverage/
 *.lcov
 
+.kiro/
+
+# Local build scripts
+docker-build-private.sh
+check-types.cjs

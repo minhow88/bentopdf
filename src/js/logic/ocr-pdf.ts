@@ -116,7 +116,7 @@ async function runOCR() {
         }
 
         // @ts-expect-error TS(2304) FIXME: Cannot find name 'pdfjsLib'.
-        const pdf = await pdfjsLib.getDocument(await readFileAsArrayBuffer(state.files[0])).promise;
+        const pdf = await pdfjsLib.getDocument({ data: await readFileAsArrayBuffer(state.files[0]) }).promise;
         const newPdfDoc = await PDFLibDocument.create();
         const font = await newPdfDoc.embedFont(StandardFonts.Helvetica);
         let fullText = '';

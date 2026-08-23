@@ -179,7 +179,7 @@ async function renderPageMergeThumbnails() {
                 container.appendChild(wrapper);
             }
 
-            pdfjsDoc.destroy();
+            pdfjsDoc.cleanup();
         }
 
         mergeState.cachedThumbnails = true;

@@ -102,7 +102,7 @@ async function setupFileInput(inputId: any, docKey: any, displayId: any) {
             showLoader(`Loading ${file.name}...`);
             const pdfBytes = await readFileAsArrayBuffer(file);
             // @ts-expect-error TS(2304) FIXME: Cannot find name 'pdfjsLib'.
-            state[docKey] = await pdfjsLib.getDocument(pdfBytes).promise;
+            state[docKey] = await pdfjsLib.getDocument({ data: pdfBytes }).promise;
 
             if (state.pdfDoc1 && state.pdfDoc2) {
                 document.getElementById('compare-viewer').classList.remove('hidden');

@@ -12,8 +12,11 @@ const A4_HEIGHT = 841.89;
 const LINE_THICKNESS = 1.5;
 const LINE_COLOR = rgb(0, 0, 0);
 const TEXT_COLOR = rgb(0, 0, 0);
-const TEXT_FONT_SIZE = 24;
-const LINE_GAP = 30; // perpendicular distance between the two parallel lines
+const TEXT_FONT_SIZE = 14;
+
+// IC card physical size: 85.60 × 53.98 mm converted to points (1 mm = 2.8346 pts)
+const IC_WIDTH_PT = 85.60 * 2.8346;  // ~242.6 pts
+const IC_HEIGHT_PT = 53.98 * 2.8346; // ~153.0 pts
 
 // Margins and spacing
 const PAGE_MARGIN = 40;
@@ -81,33 +84,46 @@ async function embedImage(pdfDoc: any, file: File) {
 }
 
 /**
- * Draws 2 parallel diagonal lines across the ENTIRE image (bottom-left to top-right),
- * with large bold text written between the two lines.
+ * Draws 2 parallel diagonal lines across the image,
+ * with text written between the two lines.
+ * Both lines go from left edge (above mid) to top edge (around mid).
+ * They are parallel — same direction, offset perpendicular to each other.
  * This matches the Malaysian IC photocopy "certified true copy" style.
  */
 function drawDiagonalCrossLines(page: any, x: number, y: number, width: number, height: number, font: any, text: string) {
-    // The lines go from bottom-left to top-right of the image area
-    // We offset them perpendicular to the diagonal direction to create parallel lines
+    // Central line direction: extends from before left edge to beyond top edge
+    // The line angle is defined by (0, 83% height) → (65% width, 100% height)
+    // We extend the start further left and end further right along the same slope
+    const slope = (height * 0.17) / (width * 0.65); // dy/dx of the line
+    const extendLeft = width * 0.20; // extend 20% of width to the left
+    const extendRight = width * 0.20; // extend 20% of width to the right
+    const centerStartX = x - extendLeft;
+    const centerStartY = y + height * 0.83 - slope * extendLeft;
+    const centerEndX = x + width * 0.65 + extendRight;
+    const centerEndY = y + height + slope * extendRight;
 
-    // Calculate the diagonal angle
-    const angle = Math.atan2(height, width); // angle in radians from horizontal
+    // Calculate the angle and perpendicular offset
+    const dx = centerEndX - centerStartX;
+    const dy = centerEndY - centerStartY;
+    const angle = Math.atan2(dy, dx);
 
-    // Perpendicular offset (to shift lines apart from each other)
-    const offsetX = (LINE_GAP / 2) * Math.sin(angle);
-    const offsetY = (LINE_GAP / 2) * Math.cos(angle);
+    // Gap between lines — tight, just enough for the text
+    const gap = TEXT_FONT_SIZE * 1.2;
+    const offsetX = (gap / 2) * Math.sin(angle);
+    const offsetY = (gap / 2) * Math.cos(angle);
 
-    // Line 1 (shifted up-left from center diagonal)
+    // Line 1 (upper): shifted one way perpendicular
     page.drawLine({
-        start: { x: x - offsetX, y: y - offsetY },
-        end: { x: x + width - offsetX, y: y + height - offsetY },
+        start: { x: centerStartX + offsetX, y: centerStartY - offsetY },
+        end: { x: centerEndX + offsetX, y: centerEndY - offsetY },
         thickness: LINE_THICKNESS,
         color: LINE_COLOR,
     });
 
-    // Line 2 (shifted down-right from center diagonal)
+    // Line 2 (lower): shifted other way perpendicular
     page.drawLine({
-        start: { x: x + offsetX, y: y + offsetY },
-        end: { x: x + width + offsetX, y: y + height + offsetY },
+        start: { x: centerStartX - offsetX, y: centerStartY + offsetY },
+        end: { x: centerEndX - offsetX, y: centerEndY + offsetY },
         thickness: LINE_THICKNESS,
         color: LINE_COLOR,
     });
@@ -116,14 +132,12 @@ function drawDiagonalCrossLines(page: any, x: number, y: number, width: number, 
     if (text.trim()) {
         const angleDegrees = (angle * 180) / Math.PI;
 
-        // Calculate text width to center it along the diagonal
+        // Center text along the line, shifted toward the bottom line
         const textWidth = font.widthOfTextAtSize(text.toUpperCase(), TEXT_FONT_SIZE);
-        const diagonalLength = Math.sqrt(width * width + height * height);
-
-        // Position text at the center of the diagonal
-        const centerProgress = (diagonalLength - textWidth) / (2 * diagonalLength);
-        const textX = x + width * centerProgress;
-        const textY = y + height * centerProgress;
+        const lineLength = Math.sqrt(dx * dx + dy * dy);
+        const centerProgress = (lineLength - textWidth) / (2 * lineLength);
+        const textX = centerStartX + dx * centerProgress + offsetX * 0.6;
+        const textY = centerStartY + dy * centerProgress - offsetY * 0.6;
 
         page.drawText(text.toUpperCase(), {
             x: textX,
@@ -176,33 +190,23 @@ export async function idCardToPdf() {
         const frontImage = await embedImage(pdfDoc, frontFile);
         const backImage = await embedImage(pdfDoc, backFile);
 
-        // Available drawing area
-        const drawWidth = A4_WIDTH - (PAGE_MARGIN * 2);
-        const availableHeightPerImage = (A4_HEIGHT - (PAGE_MARGIN * 2) - IMAGE_GAP) / 2;
+        // Use actual IC card dimensions (85.60 × 53.98 mm)
+        const frontW = IC_WIDTH_PT;
+        const frontH = IC_HEIGHT_PT;
 
-        // Scale front image to fit in the top half
-        const frontScale = Math.min(
-            drawWidth / frontImage.width,
-            availableHeightPerImage / frontImage.height
-        );
-        const frontW = frontImage.width * frontScale;
-        const frontH = frontImage.height * frontScale;
+        const backW = IC_WIDTH_PT;
+        const backH = IC_HEIGHT_PT;
 
-        // Scale back image to fit in the bottom half
-        const backScale = Math.min(
-            drawWidth / backImage.width,
-            availableHeightPerImage / backImage.height
-        );
-        const backW = backImage.width * backScale;
-        const backH = backImage.height * backScale;
-
-        // Position: front image at the top, back image at the bottom
+        // Position: center both cards horizontally, stack vertically with gap
         // PDF coordinate system: (0,0) is bottom-left
-        const frontX = PAGE_MARGIN + (drawWidth - frontW) / 2;
-        const frontY = A4_HEIGHT - PAGE_MARGIN - frontH;
+        const totalHeight = frontH + backH + IMAGE_GAP;
+        const startY = (A4_HEIGHT + totalHeight) / 2; // top of front image
 
-        const backX = PAGE_MARGIN + (drawWidth - backW) / 2;
-        const backY = PAGE_MARGIN;
+        const frontX = (A4_WIDTH - frontW) / 2;
+        const frontY = startY - frontH;
+
+        const backX = (A4_WIDTH - backW) / 2;
+        const backY = frontY - IMAGE_GAP - backH;
 
         // Draw the front image
         page.drawImage(frontImage, {

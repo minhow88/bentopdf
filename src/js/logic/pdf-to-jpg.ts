@@ -7,7 +7,7 @@ export async function pdfToJpg() {
     showLoader('Converting to JPG...');
     try {
         // @ts-expect-error TS(2304) FIXME: Cannot find name 'pdfjsLib'.
-        const pdf = await pdfjsLib.getDocument(await readFileAsArrayBuffer(state.files[0])).promise;
+        const pdf = await pdfjsLib.getDocument({ data: await readFileAsArrayBuffer(state.files[0]) }).promise;
         const zip = new JSZip();
 
         for (let i = 1; i <= pdf.numPages; i++) {

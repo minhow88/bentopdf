@@ -8,7 +8,7 @@ import * as pdfjsLib from "pdfjs-dist";
 export async function pdfToTiff() {
     showLoader('Converting PDF to TIFF...');
     try {
-        const pdf = await pdfjsLib.getDocument(await readFileAsArrayBuffer(state.files[0])).promise;
+        const pdf = await pdfjsLib.getDocument({ data: await readFileAsArrayBuffer(state.files[0]) }).promise;
         const zip = new JSZip();
 
         for (let i = 1; i <= pdf.numPages; i++) {

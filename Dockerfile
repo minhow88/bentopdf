@@ -11,7 +11,7 @@ COPY . .
 # Build without type checking for Docker (vite handles transpilation)
 RUN npx vite build --mode production
 
-# Production stage (targets the requested platform automatically)
+# Production stage
 FROM nginx:alpine
 
 # Remove default nginx config

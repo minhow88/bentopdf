@@ -17,7 +17,7 @@ async function updateTextColorPreview() {
         if (!textColorCanvas) return;
 
         // @ts-expect-error TS(2304) FIXME: Cannot find name 'pdfjsLib'.
-        const pdf = await pdfjsLib.getDocument(await readFileAsArrayBuffer(state.files[0])).promise;
+        const pdf = await pdfjsLib.getDocument({ data: await readFileAsArrayBuffer(state.files[0]) }).promise;
         const page = await pdf.getPage(1); // Preview first page
         const viewport = page.getViewport({ scale: 0.8 });
         // @ts-expect-error TS(2339) FIXME: Property 'getContext' does not exist on type 'HTML... Remove this comment to see the full error message
@@ -66,7 +66,7 @@ export async function setupTextColorTool() {
     });
 
     // @ts-expect-error TS(2304) FIXME: Cannot find name 'pdfjsLib'.
-    const pdf = await pdfjsLib.getDocument(await readFileAsArrayBuffer(state.files[0])).promise;
+    const pdf = await pdfjsLib.getDocument({ data: await readFileAsArrayBuffer(state.files[0]) }).promise;
     const page = await pdf.getPage(1);
     const viewport = page.getViewport({ scale: 0.8 });
     
@@ -95,7 +95,7 @@ export async function changeTextColor() {
     try {
         const newPdfDoc = await PDFLibDocument.create();
         // @ts-expect-error TS(2304) FIXME: Cannot find name 'pdfjsLib'.
-        const pdf = await pdfjsLib.getDocument(await readFileAsArrayBuffer(state.files[0])).promise;
+        const pdf = await pdfjsLib.getDocument({ data: await readFileAsArrayBuffer(state.files[0]) }).promise;
 
         for (let i = 1; i <= pdf.numPages; i++) {
             showLoader(`Processing page ${i} of ${pdf.numPages}...`);

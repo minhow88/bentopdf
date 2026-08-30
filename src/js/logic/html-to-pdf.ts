@@ -2,29 +2,6 @@ import { showLoader, hideLoader, showAlert } from '../ui.js';
 import { downloadFile } from '../utils/helpers.js';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
-import { marked } from 'marked';
-
-const GFM_STYLES = `
-    * { box-sizing: border-box; }
-    body { font-family: Helvetica, Arial, sans-serif; line-height: 1.6; font-size: 12px; color: #24292e; }
-    h1, h2, h3, h4, h5, h6 { margin: 20px 0 10px 0; font-weight: 600; line-height: 1.25; }
-    h1, h2 { border-bottom: 1px solid #eaecef; padding-bottom: .3em; }
-    h1 { font-size: 2em; } h2 { font-size: 1.5em; } h3 { font-size: 1.25em; }
-    p, blockquote, ul, ol, dl, table, pre { margin: 0 0 16px 0; }
-    a { color: #0366d6; text-decoration: none; }
-    blockquote { padding: 0 1em; color: #6a737d; border-left: .25em solid #dfe2e5; }
-    ul, ol { padding-left: 2em; }
-    li + li { margin-top: .25em; }
-    pre { padding: 16px; overflow: auto; font-size: 85%; line-height: 1.45; background-color: #f6f8fa; border-radius: 6px; }
-    pre code { background: transparent; padding: 0; }
-    code { font-family: 'Courier New', Courier, monospace; background-color: rgba(27,31,35,.05); border-radius: 3px; padding: .2em .4em; font-size: 85%; }
-    table { width: 100%; border-collapse: collapse; display: table; }
-    th, td { padding: 6px 13px; border: 1px solid #dfe2e5; }
-    th { font-weight: 600; background-color: #f6f8fa; }
-    tr:nth-child(2n) { background-color: #f6f8fa; }
-    img { max-width: 100%; box-sizing: content-box; }
-    hr { height: .25em; padding: 0; margin: 24px 0; background-color: #e1e4e8; border: 0; }
-`;
 
 const PAGE_FORMATS: Record<string, [number, number]> = {
     a4: [210, 297],
@@ -46,45 +23,75 @@ function readTextFile(file: File): Promise<string> {
     });
 }
 
-export async function mdToPdf() {
-    // Prefer an uploaded .md file if present, otherwise use the textarea.
-    const fileInput = document.getElementById('md-file-input') as HTMLInputElement | null;
-    let markdownContent = '';
+/**
+ * Extract the inner body markup from a full HTML document string so it can be
+ * rendered inside our sandboxed off-screen container. Scripts are stripped so
+ * that arbitrary uploaded HTML cannot execute.
+ */
+function sanitizeHtml(rawHtml: string): string {
+    const doc = new DOMParser().parseFromString(rawHtml, 'text/html');
+    // Remove any script tags and inline event handlers for safety.
+    doc.querySelectorAll('script, noscript').forEach((el) => el.remove());
+    doc.querySelectorAll('*').forEach((el) => {
+        for (const attr of Array.from(el.attributes)) {
+            if (attr.name.toLowerCase().startsWith('on')) {
+                el.removeAttribute(attr.name);
+            }
+        }
+    });
+    // Preserve <style> from <head> so uploaded stylesheets still apply.
+    const headStyles = Array.from(doc.head?.querySelectorAll('style') || [])
+        .map((s) => s.outerHTML)
+        .join('\n');
+    return headStyles + (doc.body ? doc.body.innerHTML : rawHtml);
+}
+
+export async function htmlToPdf() {
+    const fileInput = document.getElementById('html-file-input') as HTMLInputElement | null;
+    let rawHtml = '';
 
     if (fileInput && fileInput.files && fileInput.files.length > 0) {
         try {
-            markdownContent = (await readTextFile(fileInput.files[0])).trim();
+            rawHtml = (await readTextFile(fileInput.files[0])).trim();
         } catch {
-            showAlert('Read Error', 'Could not read the selected Markdown file.');
+            showAlert('Read Error', 'Could not read the selected HTML file.');
             return;
         }
     } else {
-        const textarea = document.getElementById('md-input') as HTMLTextAreaElement | null;
-        markdownContent = (textarea?.value || '').trim();
+        const textarea = document.getElementById('html-input') as HTMLTextAreaElement | null;
+        rawHtml = (textarea?.value || '').trim();
     }
 
-    if (!markdownContent) {
-        showAlert('Input Required', 'Please enter some Markdown text or upload a .md file.');
+    if (!rawHtml) {
+        showAlert('Input Required', 'Please paste some HTML or upload an .html file.');
         return;
     }
 
-    showLoader('Generating High-Quality PDF...');
+    showLoader('Rendering HTML to PDF...');
 
     let tempContainer: HTMLDivElement | null = null;
     try {
-        const htmlContent = await marked.parse(markdownContent);
-
         const pageFormat = (document.getElementById('page-format') as HTMLSelectElement | null)?.value || 'a4';
         const orientation = (document.getElementById('orientation') as HTMLSelectElement | null)?.value || 'portrait';
         const marginSize = (document.getElementById('margin-size') as HTMLSelectElement | null)?.value || 'normal';
 
         tempContainer = document.createElement('div');
         tempContainer.style.cssText = 'position: absolute; top: -9999px; left: -9999px; width: 800px; padding: 40px; background: white; color: black;';
-        const styleSheet = document.createElement('style');
-        styleSheet.textContent = GFM_STYLES;
-        tempContainer.appendChild(styleSheet);
-        tempContainer.innerHTML += htmlContent;
+        tempContainer.innerHTML = sanitizeHtml(rawHtml);
         document.body.appendChild(tempContainer);
+
+        // Wait for any images to load so they are captured in the render.
+        const images = Array.from(tempContainer.querySelectorAll('img'));
+        await Promise.all(
+            images.map(
+                (img) =>
+                    new Promise<void>((resolve) => {
+                        if (img.complete) return resolve();
+                        img.onload = () => resolve();
+                        img.onerror = () => resolve();
+                    })
+            )
+        );
 
         const canvas = await html2canvas(tempContainer, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
 
@@ -110,10 +117,10 @@ export async function mdToPdf() {
         }
 
         const pdfBlob = pdf.output('blob');
-        downloadFile(pdfBlob, 'markdown-document.pdf');
+        downloadFile(pdfBlob, 'html-document.pdf');
     } catch (error) {
-        console.error('MD to PDF conversion error:', error);
-        showAlert('Conversion Error', 'Failed to generate PDF.');
+        console.error('HTML to PDF conversion error:', error);
+        showAlert('Conversion Error', 'Failed to generate PDF from the provided HTML.');
     } finally {
         if (tempContainer && tempContainer.parentNode) {
             tempContainer.parentNode.removeChild(tempContainer);

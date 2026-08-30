@@ -993,11 +993,52 @@ compress: () => `
                 </select>
             </div>
         </div>
+        <div class="mb-4">
+            <label for="md-file-input" class="block mb-2 text-sm font-medium text-gray-300">Optional: Upload a .md file (overrides the editor below)</label>
+            <input id="md-file-input" type="file" accept=".md,.markdown,text/markdown" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+        </div>
         <div class="h-[50vh]">
             <label for="md-input" class="block mb-2 text-sm font-medium text-gray-300">Markdown Editor</label>
             <textarea id="md-input" class="w-full h-full bg-gray-900 border border-gray-600 text-gray-300 rounded-lg p-3 font-mono resize-none" placeholder="# Welcome to Markdown..."></textarea>
         </div>
         <button id="process-btn" class="btn-gradient w-full mt-6">Create PDF from Markdown</button>
+    `,
+    'html-to-pdf': () => `
+        <h2 class="text-2xl font-bold text-white mb-4">HTML to PDF</h2>
+        <p class="mb-6 text-gray-400">Paste HTML markup or upload an .html file and convert it to a PDF. <br><strong class="text-gray-300">Note:</strong> Scripts are stripped for safety. Remote images (https://...) require an internet connection to render.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div>
+                <label for="page-format" class="block mb-2 text-sm font-medium text-gray-300">Page Format</label>
+                <select id="page-format" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5">
+                    <option value="a4">A4</option>
+                    <option value="letter">Letter</option>
+                </select>
+            </div>
+            <div>
+                <label for="orientation" class="block mb-2 text-sm font-medium text-gray-300">Orientation</label>
+                <select id="orientation" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5">
+                    <option value="portrait">Portrait</option>
+                    <option value="landscape">Landscape</option>
+                </select>
+            </div>
+            <div>
+                <label for="margin-size" class="block mb-2 text-sm font-medium text-gray-300">Margin Size</label>
+                <select id="margin-size" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5">
+                    <option value="normal">Normal</option>
+                    <option value="narrow">Narrow</option>
+                    <option value="wide">Wide</option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-4">
+            <label for="html-file-input" class="block mb-2 text-sm font-medium text-gray-300">Optional: Upload an .html file (overrides the editor below)</label>
+            <input id="html-file-input" type="file" accept=".html,.htm,text/html" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+        </div>
+        <div class="h-[50vh]">
+            <label for="html-input" class="block mb-2 text-sm font-medium text-gray-300">HTML Editor</label>
+            <textarea id="html-input" class="w-full h-full bg-gray-900 border border-gray-600 text-gray-300 rounded-lg p-3 font-mono resize-none" placeholder="&lt;h1&gt;Hello&lt;/h1&gt;&lt;p&gt;Your HTML here...&lt;/p&gt;"></textarea>
+        </div>
+        <button id="process-btn" class="btn-gradient w-full mt-6">Create PDF from HTML</button>
     `,
     'svg-to-pdf': () => `
         <h2 class="text-2xl font-bold text-white mb-4">SVG to PDF</h2>
@@ -1897,5 +1938,79 @@ posterize: () => `
 
     <button id="process-btn" class="btn-gradient w-full mt-6" disabled>Generate ID Card PDF</button>
 `,
+
+    'sanitize-pdf': () => `
+        <h2 class="text-2xl font-bold text-white mb-4">Sanitize PDF</h2>
+        <p class="mb-6 text-gray-400">Remove potentially malicious or privacy-sensitive content from your PDF. Everything runs locally in your browser.</p>
+        ${createFileInputHTML()}
+        <div id="file-display-area" class="mt-4 space-y-2"></div>
+        <div id="sanitize-options" class="hidden mt-6 space-y-3">
+            <label class="flex items-center gap-3 p-3 bg-gray-900 border border-gray-700 rounded-lg cursor-pointer">
+                <input type="checkbox" id="sanitize-js" checked class="w-4 h-4">
+                <span class="text-gray-300 text-sm"><strong class="text-white">Remove JavaScript</strong> — document-level and form (AcroForm/XFA) scripts.</span>
+            </label>
+            <label class="flex items-center gap-3 p-3 bg-gray-900 border border-gray-700 rounded-lg cursor-pointer">
+                <input type="checkbox" id="sanitize-actions" checked class="w-4 h-4">
+                <span class="text-gray-300 text-sm"><strong class="text-white">Remove auto-run actions</strong> — OpenAction and additional actions (AA) that trigger on open/click.</span>
+            </label>
+            <label class="flex items-center gap-3 p-3 bg-gray-900 border border-gray-700 rounded-lg cursor-pointer">
+                <input type="checkbox" id="sanitize-embedded" checked class="w-4 h-4">
+                <span class="text-gray-300 text-sm"><strong class="text-white">Remove embedded files</strong> — attachments carried inside the PDF.</span>
+            </label>
+            <label class="flex items-center gap-3 p-3 bg-gray-900 border border-gray-700 rounded-lg cursor-pointer">
+                <input type="checkbox" id="sanitize-metadata" class="w-4 h-4">
+                <span class="text-gray-300 text-sm"><strong class="text-white">Strip metadata</strong> — title, author, and XMP data.</span>
+            </label>
+        </div>
+        <button id="process-btn" class="hidden btn-gradient w-full mt-6">Sanitize & Download</button>
+    `,
+
+    'linearize-pdf': () => `
+        <h2 class="text-2xl font-bold text-white mb-4">Optimize for Web</h2>
+        <p class="mb-6 text-gray-400">Rewrite the PDF with a clean structure to improve compatibility and reduce file size. <br><strong class="text-gray-300">Note:</strong> True "Fast Web View" linearization requires native tooling (qpdf/Ghostscript) and cannot be produced fully in the browser; this is a best-effort re-save.</p>
+        ${createFileInputHTML()}
+        <div id="file-display-area" class="mt-4 space-y-2"></div>
+        <div id="linearize-options" class="hidden mt-6 space-y-3">
+            <label class="flex items-center gap-3 p-3 bg-gray-900 border border-gray-700 rounded-lg cursor-pointer">
+                <input type="checkbox" id="linearize-object-streams" checked class="w-4 h-4">
+                <span class="text-gray-300 text-sm"><strong class="text-white">Use object streams</strong> — smaller file size (recommended). Uncheck for maximum reader compatibility.</span>
+            </label>
+            <p id="linearize-result" class="hidden text-sm text-emerald-400 font-medium"></p>
+        </div>
+        <button id="process-btn" class="hidden btn-gradient w-full mt-6">Optimize & Download</button>
+    `,
+
+    'pdf-to-pdfa': () => `
+        <h2 class="text-2xl font-bold text-white mb-4">Convert to PDF/A</h2>
+        <p class="mb-6 text-gray-400">Add PDF/A archival identification metadata and remove active content. <br><strong class="text-gray-300">Note:</strong> Strict PDF/A conformance also requires all fonts to be embedded in the source. This best-effort conversion tags the document as PDF/A; validate with a tool like veraPDF if strict compliance is required.</p>
+        ${createFileInputHTML()}
+        <div id="file-display-area" class="mt-4 space-y-2"></div>
+        <div id="pdfa-options" class="hidden mt-6 space-y-3">
+            <div>
+                <label for="pdfa-level" class="block mb-2 text-sm font-medium text-gray-300">Conformance Level</label>
+                <select id="pdfa-level" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg p-2.5">
+                    <option value="1B">PDF/A-1B (basic, widest support)</option>
+                    <option value="2B" selected>PDF/A-2B (basic)</option>
+                    <option value="3B">PDF/A-3B (basic, allows attachments)</option>
+                </select>
+            </div>
+        </div>
+        <button id="process-btn" class="hidden btn-gradient w-full mt-6">Convert to PDF/A & Download</button>
+    `,
+
+    'edit-content': () => `
+        <h2 class="text-2xl font-bold text-white mb-4">Edit PDF Content</h2>
+        <p class="mb-6 text-gray-400">Add or overlay text anywhere on your PDF. Coordinates are in points from the bottom-left corner of the page. Use the "White bg" option to cover existing text you want to replace.</p>
+        ${createFileInputHTML()}
+        <div id="file-display-area" class="mt-4 space-y-2"></div>
+        <div id="edit-content-options" class="hidden mt-6 space-y-4">
+            <p class="text-sm text-gray-400">Document has <span id="total-pages" class="text-white font-semibold">0</span> page(s).</p>
+            <div id="content-boxes" class="space-y-3"></div>
+            <button type="button" id="add-content-box-btn" class="btn bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2">
+                <i data-lucide="plus"></i> Add Text Box
+            </button>
+        </div>
+        <button id="process-btn" class="hidden btn-gradient w-full mt-6">Apply Edits & Download</button>
+    `,
 
 };

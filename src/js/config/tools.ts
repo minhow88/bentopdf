@@ -31,6 +31,7 @@ export const categories = [
             { id: 'cropper', name: 'Crop PDF', icon: 'crop', subtitle: 'Trim the margins of every page in your PDF.' },
             { id: 'form-filler', name: 'PDF Form Filler', icon: 'square-pen', subtitle: 'Fill in forms directly in the browser.' },
             { id: 'remove-blank-pages', name: 'Remove Blank Pages', icon: 'file-minus-2', subtitle: 'Automatically detect and delete blank pages.' },
+            { id: 'edit-content', name: 'Edit PDF Content', icon: 'text-cursor-input', subtitle: 'Add or overlay text anywhere on your PDF pages.' },
         ]
     },
     {
@@ -46,7 +47,8 @@ export const categories = [
             { id: 'tiff-to-pdf', name: 'TIFF to PDF', icon: 'layers', subtitle: 'Create a PDF from one or more TIFF images.' },
             { id: 'id-card-to-pdf', name: 'ID Card to PDF', icon: 'id-card', subtitle: 'Place front & back of an ID card on a single A4 page with crop marks.' },
             { id: 'txt-to-pdf', name: 'Text to PDF', icon: 'file-pen', subtitle: 'Convert a plain text file into a PDF.' },
-            // { id: 'md-to-pdf', name: 'Markdown to PDF', icon: 'file-text', subtitle: 'Convert a Markdown file into a PDF.' },
+            { id: 'md-to-pdf', name: 'Markdown to PDF', icon: 'file-text', subtitle: 'Convert a Markdown file into a PDF.' },
+            { id: 'html-to-pdf', name: 'HTML to PDF', icon: 'code', subtitle: 'Convert an HTML file or pasted markup into a PDF.' },
             // { id: 'scan-to-pdf', name: 'Scan to PDF', icon: 'camera', subtitle: 'Use your camera to create a scanned PDF.' },
             // { id: 'word-to-pdf', name: 'Word to PDF', icon: 'file-text', subtitle: 'Convert .docx documents to PDF.' },
         ]
@@ -60,6 +62,7 @@ export const categories = [
             { id: 'pdf-to-bmp', name: 'PDF to BMP', icon: 'file-image', subtitle: 'Convert each PDF page into a BMP image.' },
             { id: 'pdf-to-tiff', name: 'PDF to TIFF', icon: 'file-image', subtitle: 'Convert each PDF page into a TIFF image.' },
             { id: 'pdf-to-greyscale', name: 'PDF to Greyscale', icon: 'palette', subtitle: 'Convert all colors to black and white.' },
+            { id: 'pdf-to-pdfa', name: 'Convert to PDF/A', icon: 'archive', subtitle: 'Add PDF/A archival identification metadata (best-effort).' },
             // { id: 'pdf-to-markdown', name: 'PDF to Markdown', icon: 'file-pen', subtitle: 'Extract text into a Markdown file.' },
         ]
     },
@@ -93,6 +96,7 @@ export const categories = [
             { id: 'compress', name: 'Compress PDF', icon: 'zap', subtitle: 'Reduce the file size of your PDF.' },
             { id: 'fix-dimensions', name: 'Fix Page Size', icon: 'ruler-dimension-line', subtitle: 'Standardize all pages to a uniform size.' },
             { id: 'page-dimensions', name: 'Page Dimensions', icon: 'ruler', subtitle: 'Analyze page size, orientation, and units.' },
+            { id: 'linearize-pdf', name: 'Optimize for Web', icon: 'gauge', subtitle: 'Rewrite and shrink the PDF for faster web viewing.' },
         ]
     },
     {
@@ -103,6 +107,7 @@ export const categories = [
             { id: 'flatten', name: 'Flatten PDF', icon: 'layers', subtitle: 'Make form fields and annotations non-editable.' },
             { id: 'remove-metadata', name: 'Remove Metadata', icon: 'file-x', subtitle: 'Strip hidden data from your PDF.' },
             { id: 'change-permissions', name: 'Change Permissions', icon: 'shield-check', subtitle: 'Set or change user permissions on a PDF.' },
+            { id: 'sanitize-pdf', name: 'Sanitize PDF', icon: 'shield-x', subtitle: 'Strip JavaScript, auto-actions, and embedded files.' },
         ]
     }, 
 ];

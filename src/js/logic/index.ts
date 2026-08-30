@@ -56,6 +56,11 @@ import { posterize, setupPosterizeTool } from './posterize.js';
 import { removeBlankPages, setupRemoveBlankPagesTool } from './remove-blank-pages.js';
 import { alternateMerge, setupAlternateMergeTool } from './alternate-merge.js';
 import { idCardToPdf, setupIdCardUI } from './id-card-to-pdf.js';
+import { htmlToPdf } from './html-to-pdf.js';
+import { sanitizePdf } from './sanitize-pdf.js';
+import { linearizePdf } from './linearize-pdf.js';
+import { pdfToPdfa } from './pdf-to-pdfa.js';
+import { editContent, setupEditContentTool } from './edit-content.js';
 
 export const toolLogic = {
     merge: { process: merge, setup: setupMergeTool },
@@ -115,4 +120,9 @@ export const toolLogic = {
     'remove-blank-pages': { process: removeBlankPages, setup: setupRemoveBlankPagesTool },
     'alternate-merge': { process: alternateMerge, setup: setupAlternateMergeTool },
     'id-card-to-pdf': { process: idCardToPdf, setup: setupIdCardUI },
+    'html-to-pdf': htmlToPdf,
+    'sanitize-pdf': sanitizePdf,
+    'linearize-pdf': linearizePdf,
+    'pdf-to-pdfa': pdfToPdfa,
+    'edit-content': { process: editContent, setup: setupEditContentTool },
 };

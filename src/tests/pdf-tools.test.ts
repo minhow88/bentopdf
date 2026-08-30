@@ -16,7 +16,7 @@ describe('Tool Configuration Arrays', () => {
 
     it('should have the correct number of tools', () => {
       // This acts as a snapshot test to catch unexpected additions/removals.
-      expect(singlePdfLoadTools).toHaveLength(39);
+      expect(singlePdfLoadTools).toHaveLength(43);
     });
 
     it('should not contain any duplicate tools', () => {
